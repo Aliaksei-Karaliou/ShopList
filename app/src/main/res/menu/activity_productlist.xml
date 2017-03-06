@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_fragment_productlist_add"
+        android:title="@string/menu_fragment_productlist_add"/>
+
+    <item
+        android:id="@+id/menu_fragment_productlist_restore"
+        android:title="@string/menu_fragment_productlist_restore"/>
+
+    <item
+        android:id="@+id/menu_fragment_productlist_restoreall"
+        android:title="@string/menu_fragment_productlist_restoreall"/>
+
+    <item
+        android:id="@+id/menu_fragment_productlist_save"
+        android:title="@string/menu_fragment_productlist_save"/>
+</menu>

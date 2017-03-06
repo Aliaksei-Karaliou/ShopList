@@ -8,4 +8,10 @@
     <string name="menu_fragment_productlist_add">Add product</string>
     <string name="fragment_productlist_dialog_typeproduct">Type product</string>
     <string name="fragment_productlist_dialog_barcode">Add product from barcode</string>
+    <string name="fragment_barcodecamera_notavailable">Barcode detecting is not available</string>
+    <string name="menu_fragment_productlist_restore">Restore product</string>
+    <string name="menu_fragment_productlist_restoreall">Restore all products</string>
+    <string name="activity_productlist_noproductstorestore">No products to restore</string>
+    <string name="menu_fragment_productlist_save">Save product list</string>
+    <string name="activity_productlist_context_search">Search in shops</string>
 </resources>
