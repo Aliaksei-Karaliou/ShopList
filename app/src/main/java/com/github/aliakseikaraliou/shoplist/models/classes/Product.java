@@ -8,15 +8,13 @@ public final class Product implements IProduct {
 
     private String name;
     private String description;
-    private Number minPrice;
-    private Number maxPrice;
+    private Number price;
     private Number quantity = 1;
 
-    private Product(final String name, final String description, final Number minPrice, final Number maxPrice, final Number quantity) {
+    private Product(final String name, final String description, final Number price, final Number quantity) {
         this.name = name;
         this.description = description;
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
+        this.price = price;
         this.quantity = quantity;
     }
 
@@ -40,20 +38,12 @@ public final class Product implements IProduct {
         this.description = description;
     }
 
-    public Number getMinPrice() {
-        return minPrice;
+    public Number getPrice() {
+        return price;
     }
 
-    public void setMinPrice(final Number minPrice) {
-        this.minPrice = minPrice;
-    }
-
-    public Number getMaxPrice() {
-        return maxPrice;
-    }
-
-    public void setMaxPrice(final Number maxPrice) {
-        this.maxPrice = maxPrice;
+    public void setPrice(final Number price) {
+        this.price = price;
     }
 
     public Number getQuantity() {
@@ -67,9 +57,8 @@ public final class Product implements IProduct {
     public static class Builder {
 
         private String name;
-        private String description;
-        private Double minPrice;
-        private Double maxPrice;
+        private String description = "";
+        private Double price;
         private Number quantity = 1;
 
         public Builder(final String name) {
@@ -86,16 +75,8 @@ public final class Product implements IProduct {
             return this;
         }
 
-        public Builder setMinPrice(final Double minPrice) {
-            this.minPrice = minPrice;
-            if (maxPrice == null || minPrice > maxPrice) {
-                maxPrice = minPrice;
-            }
-            return this;
-        }
-
-        public Builder setMaxPrice(final Double maxPrice) {
-            this.maxPrice = maxPrice;
+        public Builder setPrice(final Double price) {
+            this.price = price;
             return this;
         }
 
@@ -105,7 +86,7 @@ public final class Product implements IProduct {
         }
 
         public IProduct build() {
-            return new Product(name, description, quantity, minPrice, maxPrice);
+            return new Product(name, description, price, quantity);
         }
     }
 

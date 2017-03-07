@@ -7,16 +7,20 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
 import com.github.aliakseikaraliou.shoplist.R;
+import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
-import com.github.aliakseikaraliou.shoplist.parsers.html.EurooptGipermallParsel;
+import com.github.aliakseikaraliou.shoplist.parsers.html.EurooptGipermallParser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
-public class ShopListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<IProductList> {
+public class ShopListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<IProduct>> {
 
+    private static final String URL_TEMPLATE = "https://e-dostavka.by/search/?searchtext=%s&page=%d&ajax=0";
     private String title;
 
     @Override
@@ -29,15 +33,16 @@ public class ShopListActivity extends AppCompatActivity implements LoaderManager
     }
 
     @Override
-    public Loader<IProductList> onCreateLoader(final int id, final Bundle args) {
-        return new AsyncTaskLoader<IProductList>(this) {
+    public Loader<List<IProduct>> onCreateLoader(final int id, final Bundle args) {
+        return new AsyncTaskLoader<List<IProduct>>(this) {
 
             @Override
-            public IProductList loadInBackground() {
+            public List<IProduct> loadInBackground() {
                 try {
-                    final Document page = Jsoup.connect("https://gipermall.by/search/?searchtext=" + title).get();
-                    return new EurooptGipermallParsel().parseHtml(page.outerHtml());
-                } catch (IOException e) {
+                    final String url = String.format(Locale.US, URL_TEMPLATE, title, 1);
+                    final Document page = Jsoup.connect(url).get();
+                    return new EurooptGipermallParser().parseHtml(page);
+                } catch (final IOException e) {
                     e.printStackTrace();
                     return null;
                 }
@@ -46,12 +51,12 @@ public class ShopListActivity extends AppCompatActivity implements LoaderManager
     }
 
     @Override
-    public void onLoadFinished(final Loader<IProductList> loader, final IProductList data) {
-
+    public void onLoadFinished(final Loader<List<IProduct>> loader, final List<IProduct> data) {
+        final StringBuilder builder = new StringBuilder();
     }
 
     @Override
-    public void onLoaderReset(final Loader<IProductList> loader) {
+    public void onLoaderReset(final Loader<List<IProduct>> loader) {
 
     }
 

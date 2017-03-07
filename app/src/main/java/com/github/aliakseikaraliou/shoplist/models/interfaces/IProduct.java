@@ -11,4 +11,12 @@ public interface IProduct extends Parcelable {
     String getDescription();
 
     void setDescription(final String description);
+
+    Number getPrice();
+
+    void setPrice(final Number price);
+
+    Number getQuantity();
+
+    void setQuantity(final Number quantity);
 }
