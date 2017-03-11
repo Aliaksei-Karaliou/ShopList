@@ -39,7 +39,7 @@ public class ProductListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_productlist);
 
         final Intent intent = getIntent();
-        final String productListName = intent.getStringExtra(UiConstants.Parcel.PRODUCT_LIST_NAME);
+        final String productListName = intent.getStringExtra(UiConstants.Strings.PRODUCT_LIST_NAME);
         productList = new ProductList(productListName);
 
         final ActionBar actionBar = getSupportActionBar();
@@ -151,7 +151,7 @@ public class ProductListActivity extends AppCompatActivity {
             }
         } else if (id == R.id.menu_fragment_productlist_save) {
             final Intent intent = new Intent();
-            intent.putExtra(UiConstants.Parcel.PRODUCT_LIST, productList);
+            intent.putExtra(UiConstants.Strings.PRODUCT_LIST, productList);
             setResult(UiConstants.Ids.PRODUCTLIST_CREATE, intent);
             finish();
         } else if (id == android.R.id.home) {
@@ -164,7 +164,8 @@ public class ProductListActivity extends AppCompatActivity {
     public boolean onContextItemSelected(final MenuItem item) {
         final IProduct product = productList.get(item.getOrder());
         if (item.getTitle().equals(getString(R.string.activity_productlist_context_search))) {
-            final Intent intent = new Intent(this, ProductListActivity.class);
+            final Intent intent = new Intent(this, ShopListActivity.class);
+            intent.putExtra(UiConstants.Strings.PRODUCT_TITLE, product.getName());
             startActivity(intent);
         }
         return super.onContextItemSelected(item);

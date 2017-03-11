@@ -1,9 +1,9 @@
 package com.github.aliakseikaraliou.shoplist.parsers.html;
 
 import com.github.aliakseikaraliou.shoplist.models.classes.Product;
-import com.github.aliakseikaraliou.shoplist.models.classes.ProductList;
+import com.github.aliakseikaraliou.shoplist.models.classes.ShopListProduct;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
-import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
+import com.github.aliakseikaraliou.shoplist.models.interfaces.IShopListProduct;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,10 +14,11 @@ import java.util.List;
 
 public class EurooptGipermallParser {
 
-    public List<IProduct> parseHtml(final Document html) {
+    public List<IShopListProduct> parseHtml(final Document html) {
         final Elements select = html.select("div[class^=products_card trademark_]");
-        final List<IProduct> productList = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
+        final List<IShopListProduct> productList = new ArrayList<>();
+        final int itemsCountToRun = Math.min(select.size(), 7);
+        for (int i = 0; i < itemsCountToRun; i++) {
             final Element element = select.get(i);
             //get title
             final String title = element.select("div[class=title]").select("a").first().text();
@@ -27,7 +28,9 @@ public class EurooptGipermallParser {
             final IProduct product = new Product.Builder(title)
                     .setPrice(price)
                     .build();
-            productList.add(product);
+            final String imgSrc = element.select("img[class=retina_redy]").attr("src");
+            final IShopListProduct shopListProduct = new ShopListProduct(product, imgSrc);
+            productList.add(shopListProduct);
         }
         return productList;
     }

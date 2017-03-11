@@ -109,12 +109,12 @@ public final class Product implements IProduct {
     public static final Creator<IProduct> CREATOR = new Creator<IProduct>() {
 
         @Override
-        public Product createFromParcel(final Parcel source) {
+        public IProduct createFromParcel(final Parcel source) {
             return new Product(source);
         }
 
         @Override
-        public Product[] newArray(final int size) {
+        public IProduct[] newArray(final int size) {
             return new Product[size];
         }
     };

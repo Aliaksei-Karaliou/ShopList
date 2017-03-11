@@ -3,7 +3,6 @@ package com.github.aliakseikaraliou.shoplist.ui.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity
                             public void onClick(final DialogInterface dialog, final int which) {
                                 final Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
                                 final String productListName = editText.getText().toString();
-                                intent.putExtra(UiConstants.Parcel.PRODUCT_LIST_NAME, productListName);
+                                intent.putExtra(UiConstants.Strings.PRODUCT_LIST_NAME, productListName);
                                 startActivityForResult(intent, UiConstants.Ids.PRODUCTLIST_CREATE);
                             }
                         })
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
             if (requestCode == UiConstants.Ids.PRODUCTLIST_CREATE) {
-                final IProductList productList = data.getParcelableExtra(UiConstants.Parcel.PRODUCT_LIST);
+                final IProductList productList = data.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
                 Toast.makeText(this, productList.getTitle(), Toast.LENGTH_SHORT).show();
             }
         }
