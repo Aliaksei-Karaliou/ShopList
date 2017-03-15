@@ -8,10 +8,11 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -43,6 +44,11 @@ public class ShopListActivity extends AppCompatActivity {
         progressBar = ((ProgressBar) findViewById(R.id.activity_shoplist_progress));
         progressBar.setVisibility(View.VISIBLE);
 
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         recyclerView = ((RecyclerView) findViewById(R.id.activity_shoplist_recycler));
         shopListProducts = new ArrayList<>();
         final ShopListAdapter adapter = new ShopListAdapter(this, shopListProducts);
@@ -62,20 +68,12 @@ public class ShopListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(UiConstants.Strings.SHOP_LIST, (ArrayList<? extends Parcelable>) shopListProducts);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        final List<IShopListProduct> restoredList = savedInstanceState.getParcelableArrayList(UiConstants.Strings.SHOP_LIST);
-        if (shopListProducts.isEmpty() && restoredList != null) {
-            shopListProducts.addAll(restoredList);
-            recyclerView.getAdapter().notifyItemInserted(0);
-            progressBar.setVisibility(View.INVISIBLE);
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        final int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
