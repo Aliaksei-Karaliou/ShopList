@@ -4,6 +4,8 @@ import android.os.Parcel;
 
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
 
+import java.util.Objects;
+
 public final class Product implements IProduct {
 
     private String name;
@@ -52,6 +54,11 @@ public final class Product implements IProduct {
 
     public void setQuantity(final Number quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof IProduct && name.equals(((IProduct) obj).getName());
     }
 
     public static class Builder {

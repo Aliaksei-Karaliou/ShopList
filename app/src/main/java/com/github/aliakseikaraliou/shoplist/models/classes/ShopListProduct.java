@@ -6,6 +6,7 @@ import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IShopListProduct;
 
 public class ShopListProduct implements IShopListProduct {
+
     private final IProduct product;
     private final String imageUrl;
 
@@ -22,6 +23,11 @@ public class ShopListProduct implements IShopListProduct {
     @Override
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof IShopListProduct && product.equals(((IShopListProduct) obj).getProduct());
     }
 
     @Override

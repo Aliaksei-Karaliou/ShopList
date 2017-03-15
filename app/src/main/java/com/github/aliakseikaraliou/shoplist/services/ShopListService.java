@@ -2,7 +2,6 @@ package com.github.aliakseikaraliou.shoplist.services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -10,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IShopListProduct;
 import com.github.aliakseikaraliou.shoplist.parsers.html.EurooptGipermallParser;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
-import com.github.aliakseikaraliou.shoplist.ui.activities.ShopListActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,15 +36,25 @@ public class ShopListService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable final Intent intent) {
         if (intent != null) {
+            List<IShopListProduct> shopListProducts = new ArrayList<>();
+            final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+            Intent sendIntent;
             final String title = intent.getStringExtra(UiConstants.Strings.PRODUCT_TITLE);
             try {
-                final String url = String.format(Locale.US, URL_TEMPLATE, title, 1);
-                final Document page = Jsoup.connect(url).get();
-                final List<IShopListProduct> productList = new EurooptGipermallParser().parseHtml(page);
-                final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
-                final Intent sendIntent = new Intent(UiConstants.Receivers.SHOPLIST_NAME);
-                sendIntent.putParcelableArrayListExtra(UiConstants.Strings.SHOP_LIST, (ArrayList<? extends Parcelable>) productList);
-                broadcastManager.sendBroadcast(sendIntent);
+                int i = 0;
+                while (true) {
+                    i++;
+                    final String url = String.format(Locale.US, URL_TEMPLATE, title, i);
+                    final Document page = Jsoup.connect(url).get();
+                    final List<IShopListProduct> productList = new EurooptGipermallParser().parseHtml(page);
+                    if (shopListProducts.contains(productList.get(0))) {
+                        break;
+                    }
+                    shopListProducts = new ArrayList<>(productList);
+                    sendIntent = new Intent(UiConstants.Receivers.SHOPLIST_NAME);
+                    sendIntent.putParcelableArrayListExtra(UiConstants.Strings.SHOP_LIST, (ArrayList<? extends Parcelable>) productList);
+                    broadcastManager.sendBroadcast(sendIntent);
+                }
             } catch (final IOException e) {
                 e.printStackTrace();
             }
