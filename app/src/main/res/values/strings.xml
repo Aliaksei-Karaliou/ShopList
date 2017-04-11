@@ -6,8 +6,8 @@
 
     <string name="action_settings">Settings</string>
     <string name="menu_fragment_productlist_add">Add product</string>
-    <string name="fragment_productlist_dialog_typeproduct">Type product</string>
-    <string name="fragment_productlist_dialog_barcode">Add product from barcode</string>
+    <string name="productlist_dialog_typeproduct">Type product</string>
+    <string name="productlist_dialog_barcode">Add product from barcode</string>
     <string name="fragment_barcodecamera_notavailable">Barcode detecting is not available</string>
     <string name="menu_fragment_productlist_restore">Restore product</string>
     <string name="menu_fragment_productlist_restoreall">Restore all products</string>
@@ -15,4 +15,7 @@
     <string name="menu_fragment_productlist_save">Save product list</string>
     <string name="activity_productlist_context_search">Search in shops</string>
     <string name="item_shoplist_button">Add</string>
+    <string name="product_list_dialog_shop">Add product from Shop</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -25,7 +25,7 @@ public class ProductList implements IProductList {
 
     public ProductList(final String title, final List<IProduct> productList) {
         this.title = title;
-        this.productList = productList;
+        this.productList = new ArrayList<>(productList);
     }
 
     @Override

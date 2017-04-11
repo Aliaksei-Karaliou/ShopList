@@ -85,20 +85,20 @@ public class ProductListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        final String[] items = {getString(R.string.fragment_productlist_dialog_typeproduct),
-                getString(R.string.fragment_productlist_dialog_barcode)};
-        if (id == R.id.menu_fragment_productlist_add) {
+        final String[] items = new String[]{getString(R.string.productlist_dialog_typeproduct),
+                getString(R.string.productlist_dialog_barcode), getString(R.string.product_list_dialog_shop)};
+        if (id == R.id.menu_activity_productlist_add) {
             final AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setItems(items, new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(final DialogInterface dialogInterface, final int which) {
-                            if (items[which].equals(getString(R.string.fragment_productlist_dialog_typeproduct))) {
+                            if (items[which].equals(getString(R.string.productlist_dialog_typeproduct))) {
                                 final EditText editText = new EditText(ProductListActivity.this);
                                 final AlertDialog dialog = new AlertDialog.Builder(ProductListActivity.this)
-                                        .setTitle(R.string.fragment_productlist_dialog_typeproduct)
+                                        .setTitle(R.string.productlist_dialog_typeproduct)
                                         .setView(editText)
-                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                                             @Override
                                             public void onClick(final DialogInterface dialog, final int which) {
@@ -108,7 +108,7 @@ public class ProductListActivity extends AppCompatActivity {
                                                 recyclerView.getAdapter().notifyItemInserted(productList.size() - 1);
                                             }
                                         })
-                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 
                                             @Override
                                             public void onClick(final DialogInterface dialog, final int which) {
@@ -117,14 +117,17 @@ public class ProductListActivity extends AppCompatActivity {
                                         })
                                         .create();
                                 dialog.show();
-                            } else if (items[which].equals(getString(R.string.fragment_productlist_dialog_barcode))) {
+                            } else if (items[which].equals(getString(R.string.productlist_dialog_barcode))) {
                                 final Intent intent = new Intent(ProductListActivity.this, BarcodeActivity.class);
+                                startActivity(intent);
+                            } else if (items[which].equals(getString(R.string.product_list_dialog_shop))){
+                                final Intent intent = new Intent(ProductListActivity.this,ShopListActivity.class);
                                 startActivity(intent);
                             }
                         }
                     }).create();
             alertDialog.show();
-        } else if (id == R.id.menu_fragment_productlist_restore) {
+        } else if (id == R.id.menu_activity_productlist_restore) {
             if (!deletedProducts.empty()) {
                 final Pair<Integer, IProduct> productPair = deletedProducts.pop();
                 final Integer position = productPair.first;
@@ -134,7 +137,7 @@ public class ProductListActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.activity_productlist_noproductstorestore, Toast.LENGTH_SHORT).show();
             }
-        } else if (id == R.id.menu_fragment_productlist_restoreall) {
+        } else if (id == R.id.menu_activity_productlist_restoreall) {
             if (!deletedProducts.empty()) {
                 Pair<Integer, IProduct> productPair;
                 Integer position;
@@ -149,7 +152,7 @@ public class ProductListActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.activity_productlist_noproductstorestore, Toast.LENGTH_SHORT).show();
             }
-        } else if (id == R.id.menu_fragment_productlist_save) {
+        } else if (id == R.id.menu_activity_productlist_save) {
             final Intent intent = new Intent();
             intent.putExtra(UiConstants.Strings.PRODUCT_LIST, productList);
             setResult(UiConstants.Ids.PRODUCTLIST_CREATE, intent);

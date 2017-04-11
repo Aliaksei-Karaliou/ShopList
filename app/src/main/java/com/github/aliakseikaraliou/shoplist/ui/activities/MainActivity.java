@@ -22,8 +22,13 @@ import com.github.aliakseikaraliou.shoplist.R;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private List<IProductList> list;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -73,6 +78,8 @@ public class MainActivity extends AppCompatActivity
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        list=new ArrayList<>();
     }
 
     @Override
@@ -133,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         if (data != null) {
             if (requestCode == UiConstants.Ids.PRODUCTLIST_CREATE) {
                 final IProductList productList = data.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
-                Toast.makeText(this, productList.getTitle(), Toast.LENGTH_SHORT).show();
+                list.add(productList);
             }
         }
     }

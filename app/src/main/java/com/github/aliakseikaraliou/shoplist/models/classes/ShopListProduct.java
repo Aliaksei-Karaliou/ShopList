@@ -54,7 +54,7 @@ public class ShopListProduct implements IShopListProduct {
         }
 
         @Override
-        public ShopListProduct[] newArray(int size) {
+        public ShopListProduct[] newArray(final int size) {
             return new ShopListProduct[size];
         }
     };
