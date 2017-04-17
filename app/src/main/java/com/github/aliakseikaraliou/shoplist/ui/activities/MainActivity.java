@@ -11,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import com.github.aliakseikaraliou.shoplist.R;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
+import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private List<IProductList> list;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -79,7 +83,12 @@ public class MainActivity extends AppCompatActivity
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        list=new ArrayList<>();
+        list = new ArrayList<>();
+
+        recyclerView = ((RecyclerView) findViewById(R.id.activity_main_recycler));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(new ProductListAdapter(this, list));
+
     }
 
     @Override
@@ -141,6 +150,7 @@ public class MainActivity extends AppCompatActivity
             if (requestCode == UiConstants.Ids.PRODUCTLIST_CREATE) {
                 final IProductList productList = data.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
                 list.add(productList);
+                recyclerView.getAdapter().notifyItemInserted(productList.size());
             }
         }
     }

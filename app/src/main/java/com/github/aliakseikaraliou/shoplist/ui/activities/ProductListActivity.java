@@ -23,7 +23,7 @@ import com.github.aliakseikaraliou.shoplist.models.classes.ProductList;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
-import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
+import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductAdapter;
 
 import java.util.Stack;
 
@@ -53,7 +53,7 @@ public class ProductListActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.fragment_productlist_recycler);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        final ProductListAdapter adapter = new ProductListAdapter(this, productList);
+        final ProductAdapter adapter = new ProductAdapter(this, productList);
         recyclerView.setAdapter(adapter);
         final DividerItemDecoration divider = new DividerItemDecoration(this, layoutManager.getOrientation());
         recyclerView.addItemDecoration(divider);
