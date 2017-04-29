@@ -11,9 +11,9 @@ public final class Product implements IProduct {
     private String name;
     private String description;
     private Number price;
-    private Number quantity = 1;
+    private int quantity = 1;
 
-    private Product(final String name, final String description, final Number price, final Number quantity) {
+    private Product(final String name, final String description, final Number price, final int quantity) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -52,7 +52,7 @@ public final class Product implements IProduct {
         return quantity;
     }
 
-    public void setQuantity(final Number quantity) {
+    public void setQuantity(final int quantity) {
         this.quantity = quantity;
     }
 
@@ -66,7 +66,7 @@ public final class Product implements IProduct {
         private String name;
         private String description = "";
         private Double price;
-        private Number quantity = 1;
+        private int quantity = 1;
 
         public Builder(final String name) {
             this.name = name;
@@ -87,7 +87,7 @@ public final class Product implements IProduct {
             return this;
         }
 
-        public Builder setQuantity(final Number quantity) {
+        public Builder setQuantity(final int quantity) {
             this.quantity = quantity;
             return this;
         }
