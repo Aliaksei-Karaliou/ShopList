@@ -162,15 +162,19 @@ public class ProductListActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.activity_productlist_noproductstorestore, Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.menu_activity_productlist_save) {
-            final Intent intent = new Intent();
-            intent.putExtra(UiConstants.Strings.PRODUCT_LIST, productList);
-            intent.putExtra(UiConstants.Strings.POSITION, position);
-            setResult(UiConstants.Ids.PRODUCTLIST_CREATE, intent);
+            save();
             finish();
         } else if (id == android.R.id.home) {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void save() {
+        final Intent intent = new Intent();
+        intent.putExtra(UiConstants.Strings.PRODUCT_LIST, productList);
+        intent.putExtra(UiConstants.Strings.POSITION, position);
+        setResult(UiConstants.Ids.PRODUCTLIST_CREATE, intent);
     }
 
     @Override
@@ -186,10 +190,34 @@ public class ProductListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        setResult(UiConstants.Ids.PRODUCTLIST_CREATE, null);
 
-        
+        final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Do you want to save your changes?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
-        super.onBackPressed();
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        save();
+                        ProductListActivity.super.onBackPressed();
+                    }
+                })
+                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        setResult(UiConstants.Ids.PRODUCTLIST_CREATE, null);
+                        ProductListActivity.super.onBackPressed();
+                    }
+                })
+                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+
+                    }
+                })
+                .create();
+        alertDialog.show();
+
     }
 }
