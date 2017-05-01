@@ -18,10 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.github.aliakseikaraliou.shoplist.R;
 import com.github.aliakseikaraliou.shoplist.db.DbProductListConnector;
 import com.github.aliakseikaraliou.shoplist.db.IDbConnector;
+import com.github.aliakseikaraliou.shoplist.models.classes.ProductList;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
@@ -91,7 +93,18 @@ public class MainActivity extends AppCompatActivity
 
         recyclerView = ((RecyclerView) findViewById(R.id.activity_main_recycler));
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(new ProductListAdapter(this, list));
+        final ProductListAdapter adapter = new ProductListAdapter(this, list);
+        adapter.setOnProductListClickListener(new ProductListAdapter.OnProductListClickListener() {
+
+            @Override
+            public void onClick(final int position) {
+                final Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
+                intent.putExtra(UiConstants.Strings.PRODUCT_LIST, list.get(position));
+                intent.putExtra(UiConstants.Strings.POSITION, position);
+                startActivityForResult(intent, UiConstants.Ids.PRODUCTLIST_CHANGE);
+            }
+        });
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -150,11 +163,19 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
+            final IProductList productList = data.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
             if (requestCode == UiConstants.Ids.PRODUCTLIST_CREATE) {
-                final IProductList productList = data.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
                 list.add(productList);
                 recyclerView.getAdapter().notifyDataSetChanged();
                 productListConnector.put(productList);
+            } else if (requestCode == UiConstants.Ids.PRODUCTLIST_CHANGE) {
+                final int position = data.getIntExtra(UiConstants.Strings.POSITION, -1);
+                if (!productList.isEmpty()) {
+                    list.set(position, productList);
+                } else {
+                    list.remove(position);
+                }
+                recyclerView.getAdapter().notifyDataSetChanged();
             }
         }
     }

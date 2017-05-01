@@ -18,21 +18,36 @@ public class ProductListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private final Context context;
     private final List<IProductList> productLists;
     private final String COUNT_TEMPLATE = "%d\nitems";
+    private OnProductListClickListener onProductListClickListener;
 
     public ProductListAdapter(final Context context, final List<IProductList> productLists) {
         this.context = context;
         this.productLists = productLists;
     }
 
+    public void setOnProductListClickListener(final OnProductListClickListener onProductListClickListener) {
+        this.onProductListClickListener = onProductListClickListener;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         final View view = LayoutInflater.from(context).inflate(R.layout.item_productlist, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                if (onProductListClickListener != null && view.getTag() != null) {
+                    onProductListClickListener.onClick((Integer) view.getTag());
+                }
+            }
+        });
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         final IProductList productList = productLists.get(position);
+        holder.itemView.setTag(position);
         ((ViewHolder) holder).nameTextView.setText(productList.getTitle());
         ((ViewHolder) holder).countTextView.setText(String.format(Locale.getDefault(), COUNT_TEMPLATE, productList.size()));
     }
@@ -52,5 +67,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             countTextView = (TextView) itemView.findViewById(R.id.item_productlist_count);
             nameTextView = (TextView) itemView.findViewById(R.id.item_productlist_name);
         }
+    }
+
+    public interface OnProductListClickListener {
+
+        void onClick(int position);
     }
 }

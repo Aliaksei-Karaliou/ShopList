@@ -3,6 +3,7 @@ package com.github.aliakseikaraliou.shoplist.ui.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -25,6 +26,7 @@ import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductAdapter;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class ProductListActivity extends AppCompatActivity {
@@ -32,6 +34,7 @@ public class ProductListActivity extends AppCompatActivity {
     private IProductList productList;
     private RecyclerView recyclerView;
     private Stack<Pair<Integer, IProduct>> deletedProducts;
+    private int position = -1;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -39,8 +42,14 @@ public class ProductListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_productlist);
 
         final Intent intent = getIntent();
-        final String productListName = intent.getStringExtra(UiConstants.Strings.PRODUCT_LIST_NAME);
-        productList = new ProductList(productListName);
+
+        if (intent.hasExtra(UiConstants.Strings.PRODUCT_LIST)) {
+            productList = intent.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
+            position = intent.getIntExtra(UiConstants.Strings.POSITION, -1);
+        } else if (intent.hasExtra(UiConstants.Strings.PRODUCT_LIST_NAME)) {
+            final String productListName = intent.getStringExtra(UiConstants.Strings.PRODUCT_LIST_NAME);
+            productList = new ProductList(productListName);
+        }
 
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -120,8 +129,8 @@ public class ProductListActivity extends AppCompatActivity {
                             } else if (items[which].equals(getString(R.string.productlist_dialog_barcode))) {
                                 final Intent intent = new Intent(ProductListActivity.this, BarcodeActivity.class);
                                 startActivity(intent);
-                            } else if (items[which].equals(getString(R.string.product_list_dialog_shop))){
-                                final Intent intent = new Intent(ProductListActivity.this,ShopListActivity.class);
+                            } else if (items[which].equals(getString(R.string.product_list_dialog_shop))) {
+                                final Intent intent = new Intent(ProductListActivity.this, ShopListActivity.class);
                                 startActivity(intent);
                             }
                         }
@@ -155,6 +164,7 @@ public class ProductListActivity extends AppCompatActivity {
         } else if (id == R.id.menu_activity_productlist_save) {
             final Intent intent = new Intent();
             intent.putExtra(UiConstants.Strings.PRODUCT_LIST, productList);
+            intent.putExtra(UiConstants.Strings.POSITION, position);
             setResult(UiConstants.Ids.PRODUCTLIST_CREATE, intent);
             finish();
         } else if (id == android.R.id.home) {
@@ -177,6 +187,9 @@ public class ProductListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         setResult(UiConstants.Ids.PRODUCTLIST_CREATE, null);
+
+        
+
         super.onBackPressed();
     }
 }

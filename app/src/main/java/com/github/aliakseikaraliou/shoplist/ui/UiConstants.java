@@ -5,6 +5,7 @@ public interface UiConstants {
     interface Ids {
 
         int PRODUCTLIST_CREATE = 0;
+        int PRODUCTLIST_CHANGE = 1;
     }
 
     interface Strings {
@@ -13,6 +14,7 @@ public interface UiConstants {
         String PRODUCT_LIST_NAME = "Product List Name";
         String SHOP_LIST = "Shop List";
         String PRODUCT_TITLE = "Product title";
+        String POSITION = "position";
     }
 
     interface Receivers {
