@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -178,5 +179,21 @@ public class MainActivity extends AppCompatActivity
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public boolean onContextItemSelected(final MenuItem item) {
+        final int position = item.getOrder();
+        if (item.getTitle().equals(getString(R.string.context_menu_productlist_change))) {
+            final Intent intent = new Intent(this, ProductListActivity.class);
+            intent.putExtra(UiConstants.Strings.PRODUCT_LIST, list.get(position));
+            intent.putExtra(UiConstants.Strings.POSITION, position);
+            startActivityForResult(intent, UiConstants.Ids.PRODUCTLIST_CHANGE);
+        } else if (item.getTitle().equals(getString(R.string.context_menu_productlist_delete))) {
+            final IProductList product = list.remove(position);
+            productListConnector.remove(product);
+            recyclerView.getAdapter().notifyItemRemoved(position);
+        }
+        return super.onContextItemSelected(item);
     }
 }

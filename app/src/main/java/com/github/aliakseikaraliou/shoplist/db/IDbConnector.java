@@ -7,4 +7,6 @@ public interface IDbConnector<T> {
     long put(T item);
 
     List<T> getAll();
+
+    int remove(T item);
 }

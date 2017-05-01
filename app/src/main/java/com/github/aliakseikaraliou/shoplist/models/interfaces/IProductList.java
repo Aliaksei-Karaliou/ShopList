@@ -9,4 +9,8 @@ public interface IProductList extends List<IProduct>, Parcelable {
     String getTitle();
 
     void setTitle(final String title);
+
+   Long getId();
+
+    void setId(final long id);
 }

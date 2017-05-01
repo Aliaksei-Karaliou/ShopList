@@ -17,6 +17,7 @@ public class ProductList implements IProductList {
 
     private String title;
     private final List<IProduct> productList;
+    private Long id = null;
 
     public ProductList(final String title) {
         this.title = title;
@@ -36,6 +37,18 @@ public class ProductList implements IProductList {
     @Override
     public void setTitle(final String title) {
         this.title = title;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final long id) {
+        if (this.id == null) {
+            this.id = id;
+        }
     }
 
     @Override

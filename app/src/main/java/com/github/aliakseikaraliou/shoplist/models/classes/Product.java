@@ -12,12 +12,25 @@ public final class Product implements IProduct {
     private String description;
     private double price;
     private double quantity = 1;
+    private Long id;
 
     private Product(final String name, final String description, final double price, final double quantity) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(final long id) {
+        if (this.id == null) {
+            this.id = id;
+        }
     }
 
     @Override

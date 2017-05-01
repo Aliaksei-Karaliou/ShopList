@@ -29,12 +29,27 @@ public class DbProductConnector implements IDbConnector<IProduct> {
         contentValues.put(DbConstants.Product.DESCRIPTION, item.getDescription());
         contentValues.put(DbConstants.Product.PRICE, item.getPrice());
         contentValues.put(DbConstants.Product.QUANTITY, item.getQuantity());
-        return database.insert(DbConstants.Product.TABLE_NAME, null, contentValues);
+        final long raw = database.insert(DbConstants.Product.TABLE_NAME, null, contentValues);
+        item.setId(raw);
+        return raw;
     }
 
     @Override
     public List<IProduct> getAll() {
+        // not needed
         return null;
+    }
+
+    @Override
+    public int remove(final IProduct item) {
+        final Long id = item.getId();
+        if (id != null) {
+            final int delete = database.delete(DbConstants.Product.TABLE_NAME, "id=" + id, null);
+            new StringBuilder();
+            return delete;
+        } else {
+            return 0;
+        }
     }
 
 }

@@ -12,9 +12,11 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -193,7 +195,7 @@ public class ProductListActivity extends AppCompatActivity {
 
         final AlertDialog alertDialog = new AlertDialog.Builder(this)
                 .setTitle("Do you want to save your changes?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -201,7 +203,7 @@ public class ProductListActivity extends AppCompatActivity {
                         ProductListActivity.super.onBackPressed();
                     }
                 })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -209,7 +211,7 @@ public class ProductListActivity extends AppCompatActivity {
                         ProductListActivity.super.onBackPressed();
                     }
                 })
-                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -218,6 +220,5 @@ public class ProductListActivity extends AppCompatActivity {
                 })
                 .create();
         alertDialog.show();
-
     }
 }

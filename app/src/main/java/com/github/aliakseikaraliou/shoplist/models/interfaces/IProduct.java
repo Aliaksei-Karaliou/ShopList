@@ -4,6 +4,10 @@ import android.os.Parcelable;
 
 public interface IProduct extends Parcelable {
 
+    Long getId();
+
+    void setId(long id);
+
     String getName();
 
     void setName(final String name);

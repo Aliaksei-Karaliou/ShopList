@@ -2,6 +2,7 @@ package com.github.aliakseikaraliou.shoplist.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,15 +58,22 @@ public class ProductListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return productLists.size();
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder {
+    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private final TextView countTextView;
         private final TextView nameTextView;
 
-        public ViewHolder(final View itemView) {
+        ViewHolder(final View itemView) {
             super(itemView);
             countTextView = (TextView) itemView.findViewById(R.id.item_productlist_count);
             nameTextView = (TextView) itemView.findViewById(R.id.item_productlist_name);
+            itemView.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(final ContextMenu menu, final View view, final ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(0, view.getId(), super.getLayoutPosition(), R.string.context_menu_productlist_change);
+            menu.add(0, view.getId(), super.getLayoutPosition(), R.string.context_menu_productlist_delete);
         }
     }
 
