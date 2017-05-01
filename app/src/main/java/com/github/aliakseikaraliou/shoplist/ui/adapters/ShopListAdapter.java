@@ -37,7 +37,7 @@ public class ShopListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final IShopListProduct shopListProduct = productList.get(position);
 
         viewHolder.name.setText(shopListProduct.getProduct().getName());
-        viewHolder.price.setText(shopListProduct.getProduct().getPrice().toString());
+        viewHolder.price.setText(String.valueOf(shopListProduct.getProduct().getPrice()));
         Picasso.with(context)
                 .load(shopListProduct.getImageUrl())
                 .into(viewHolder.image);

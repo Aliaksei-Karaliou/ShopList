@@ -10,10 +10,10 @@ public final class Product implements IProduct {
 
     private String name;
     private String description;
-    private Number price;
+    private double price;
     private int quantity = 1;
 
-    private Product(final String name, final String description, final Number price, final int quantity) {
+    private Product(final String name, final String description, final double price, final int quantity) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -40,15 +40,15 @@ public final class Product implements IProduct {
         this.description = description;
     }
 
-    public Number getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(final Number price) {
+    public void setPrice(final double price) {
         this.price = price;
     }
 
-    public Number getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 

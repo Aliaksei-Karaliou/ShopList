@@ -18,9 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.github.aliakseikaraliou.shoplist.R;
+import com.github.aliakseikaraliou.shoplist.db.DbProductListConnector;
+import com.github.aliakseikaraliou.shoplist.db.IDbConnector;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity
 
     private List<IProductList> list;
     private RecyclerView recyclerView;
+    private IDbConnector<IProductList> productListConnector;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(new ProductListAdapter(this, list));
 
+        productListConnector = new DbProductListConnector(this);
     }
 
     @Override
@@ -150,7 +153,8 @@ public class MainActivity extends AppCompatActivity
             if (requestCode == UiConstants.Ids.PRODUCTLIST_CREATE) {
                 final IProductList productList = data.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
                 list.add(productList);
-                recyclerView.getAdapter().notifyItemInserted(productList.size());
+                recyclerView.getAdapter().notifyDataSetChanged();
+                productListConnector.put(productList);
             }
         }
     }
