@@ -86,12 +86,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         list = new ArrayList<>();
+        productListConnector = new DbProductListConnector(this);
+        list.addAll(productListConnector.getAll());
 
         recyclerView = ((RecyclerView) findViewById(R.id.activity_main_recycler));
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(new ProductListAdapter(this, list));
-
-        productListConnector = new DbProductListConnector(this);
     }
 
     @Override

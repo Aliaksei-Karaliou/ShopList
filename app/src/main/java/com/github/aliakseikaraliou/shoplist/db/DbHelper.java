@@ -7,19 +7,22 @@ import android.util.Log;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final String SHOPLIST_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS \'" + DbConstants.ShopList.TABLE_NAME + "\' (\'id\'INTEGER PRIMARY KEY AUTOINCREMENT, \'" + DbConstants.ShopList.TITLE + "\' TEXT);";
+    private static final String SHOPLIST_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS \'" + DbConstants.ProductList.TABLE_NAME + "\' (\'id\'INTEGER PRIMARY KEY AUTOINCREMENT, \'" + DbConstants.ProductList.TITLE + "\' TEXT);";
     private static final String DB_NAME = "Shoplist";
     private static final String TAG = "MYSQL";
+    private static final String PRODUCT_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS \'" + DbConstants.Product.TABLE_NAME + "\' (\'id\' INTEGER PRIMARY KEY AUTOINCREMENT, \'" + DbConstants.Product.NAME + "\' TEXT,\'" + DbConstants.Product.DESCRIPTION + "\' TEXT, \'" + DbConstants.Product.PRICE + "\' FLOAT, \'" + DbConstants.Product.QUANTITY + "\' FLOAT);";
+    private static final String PRODUCT_PRODUCTLIST_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS \'" + DbConstants.Product_ProductList.TABLE_NAME + "\' (\'" + DbConstants.Product_ProductList.PRODUCT_LIST_ID + "\' INTEGER, \'" + DbConstants.Product_ProductList.PRODUCT_ID + "\' INTEGER)";
 
     public DbHelper(final Context context, final int version) {
         super(context, DB_NAME, null, version);
-        Log.i(TAG, SHOPLIST_TABLE_CREATE);
     }
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
         Log.i(TAG, "onCreate");
         db.execSQL(SHOPLIST_TABLE_CREATE);
+        db.execSQL(PRODUCT_TABLE_CREATE);
+        db.execSQL(PRODUCT_PRODUCTLIST_TABLE_CREATE);
     }
 
     @Override

@@ -16,7 +16,7 @@ public interface IProduct extends Parcelable {
 
     void setPrice(final double price);
 
-    int getQuantity();
+    double getQuantity();
 
-    void setQuantity(final int quantity);
+    void setQuantity(final double quantity);
 }
