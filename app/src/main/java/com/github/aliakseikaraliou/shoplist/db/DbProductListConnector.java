@@ -93,7 +93,6 @@ public class DbProductListConnector implements IDbConnector<IProductList> {
             while (cursor.moveToNext());
         }
         cursor.close();
-        database.execSQL("DROP TABLE IF EXISTS" + DbConstants.Product.NAME);
         return productLists;
     }
 

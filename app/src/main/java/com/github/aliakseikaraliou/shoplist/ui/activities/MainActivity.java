@@ -14,17 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.github.aliakseikaraliou.shoplist.R;
 import com.github.aliakseikaraliou.shoplist.db.DbProductListConnector;
 import com.github.aliakseikaraliou.shoplist.db.IDbConnector;
-import com.github.aliakseikaraliou.shoplist.models.classes.ProductList;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
@@ -69,8 +66,6 @@ public class MainActivity extends AppCompatActivity
 
                             @Override
                             public void onClick(final DialogInterface dialog, final int which) {
-                                final Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
-                                startActivityForResult(intent, UiConstants.Ids.PRODUCTLIST_CREATE);
                             }
                         })
                         .create();
@@ -149,8 +144,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
+        } else if (id == R.id.drawer_register) {
+            final Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_send) {
 
         }
