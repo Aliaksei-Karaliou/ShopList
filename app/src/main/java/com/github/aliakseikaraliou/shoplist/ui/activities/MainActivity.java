@@ -25,6 +25,8 @@ import com.github.aliakseikaraliou.shoplist.db.IDbConnector;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         final FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -145,10 +149,13 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.drawer_register) {
-            final Intent intent = new Intent(this, LoginActivity.class);
+            final Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.drawer_authorize) {
+            final Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

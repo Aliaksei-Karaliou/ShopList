@@ -13,11 +13,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -26,31 +26,25 @@ public class LoginActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
 
-        final EditText emailEditText = (EditText) findViewById(R.id.activity_login_e_mail);
+        final EditText emailEditText = (EditText) findViewById(R.id.activity_login_email);
         final EditText passwordEditText = (EditText) findViewById(R.id.activity_login_password);
-        final EditText confirmEditText = (EditText) findViewById(R.id.activity_login_passwordConfirm);
 
-        final Button registerButton = (Button) findViewById(R.id.activity_login_register);
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        final Button submitButton = (Button) findViewById(R.id.activity_login_submit);
+        submitButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(final View v) {
-                if (!passwordEditText.getText().toString().equals(confirmEditText.getText().toString())) {
-                    Toast.makeText(LoginActivity.this, R.string.activity_login_passwordfail, Toast.LENGTH_SHORT).show();
-                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailEditText.getText()).matches()) {
-                    Toast.makeText(LoginActivity.this, R.string.activity_login_emailfail, Toast.LENGTH_SHORT).show();
-                } else {
-                    auth.createUserWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
-                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+            public void onClick(final View view) {
+                auth.signInWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
-                                @Override
-                                public void onComplete(@NonNull final Task<AuthResult> task) {
-                                    if (!task.isSuccessful()) {
-                                        Toast.makeText(LoginActivity.this, R.string.activity_login_firebasefail, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
+                    @Override
+                    public void onComplete(@NonNull final Task<AuthResult> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, R.string.activity_login_firebasefail, Toast.LENGTH_SHORT).show();
+                        } else {
+                            onBackPressed();
+                        }
+                    }
+                });
             }
         });
 
@@ -58,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(final View v) {
+            public void onClick(final View view) {
                 onBackPressed();
             }
         });

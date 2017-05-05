@@ -30,6 +30,8 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode"/>
 
+        <activity android:name=".ui.activities.RegisterActivity">
+        </activity>
         <activity android:name=".ui.activities.LoginActivity">
         </activity>
     </application>

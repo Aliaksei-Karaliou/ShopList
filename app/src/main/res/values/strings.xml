@@ -25,9 +25,10 @@
     <string name="activity_login_e_mail">E-mail</string>
     <string name="activity_login_password">Password</string>
     <string name="drawer_register">Register</string>
-    <string name="activity_login_register">Register</string>
+    <string name="activity_register_register">Register</string>
     <string name="activity_login_emailfail">Email is not correct</string>
     <string name="activity_login_confirm">Confirm Password</string>
     <string name="activity_login_passwordfail">Passwords are not matches</string>
     <string name="activity_login_firebasefail">Some error happens</string>
+    <string name="drawer_authorize">Authorize</string>
 </resources>

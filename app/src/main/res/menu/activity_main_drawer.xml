@@ -26,6 +26,12 @@
                 android:id="@+id/drawer_register"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/drawer_register"/>
+
+            <item
+                android:id="@+id/drawer_authorize"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/drawer_authorize"/>
+
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
