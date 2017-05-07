@@ -74,6 +74,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public void onCreateContextMenu(final ContextMenu menu, final View view, final ContextMenu.ContextMenuInfo menuInfo) {
             menu.add(0, view.getId(), super.getLayoutPosition(), R.string.context_menu_productlist_change);
             menu.add(0, view.getId(), super.getLayoutPosition(), R.string.context_menu_productlist_delete);
+            menu.add(0, view.getId(), super.getLayoutPosition(), R.string.context_menu_productlist_save);
         }
     }
 

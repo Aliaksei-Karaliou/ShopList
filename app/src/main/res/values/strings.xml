@@ -31,4 +31,6 @@
     <string name="activity_login_passwordfail">Passwords are not matches</string>
     <string name="activity_login_firebasefail">Some error happens</string>
     <string name="drawer_authorize">Authorize</string>
+    <string name="context_menu_productlist_save">Send</string>
+    <string name="activity_main_send_title">Enter a receiver\'s email</string>
 </resources>

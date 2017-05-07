@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,10 +24,12 @@ import com.github.aliakseikaraliou.shoplist.R;
 import com.github.aliakseikaraliou.shoplist.db.DbProductListConnector;
 import com.github.aliakseikaraliou.shoplist.db.IDbConnector;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
+import com.github.aliakseikaraliou.shoplist.services.FirebaseMessagingService;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String token = FirebaseInstanceId.getInstance().getToken();
+
+        final Intent firebaseMessagingServiceIntent = new Intent(this, FirebaseMessagingService.class);
+        startService(firebaseMessagingServiceIntent);
 
         final FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -196,6 +203,25 @@ public class MainActivity extends AppCompatActivity
             final IProductList product = list.remove(position);
             productListConnector.remove(product);
             recyclerView.getAdapter().notifyItemRemoved(position);
+        } else if (item.getTitle().equals(getString(R.string.context_menu_productlist_save))) {
+            final EditText emailEditText = new EditText(this);
+            final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.activity_main_send_title)
+                    .setView(emailEditText)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            final String email = String.valueOf(emailEditText.getText());
+                            if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                final IProductList list = MainActivity.this.list.get(position);
+                                final String json = list.toJson();
+                            }
+                            new StringBuilder();
+                        }
+                    })
+                    .create();
+            alertDialog.show();
         }
         return super.onContextItemSelected(item);
     }

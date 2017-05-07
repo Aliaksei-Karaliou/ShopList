@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "372730680645-vb8p6q09dvnmdqlsaqmqc0ebn157d1ob.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.aliakseikaraliou.shoplist",
+            "certificate_hash": "aca34581d35a30956835c7405ba4dba504daaa18"
+          }
+        },
+        {
           "client_id": "372730680645-7ioftubjeunmb92c9kos5kkihueh284l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -30,6 +38,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyDVjYRBwlm9r7k6Vt3_xDkDnel67YMsazo"
+        },
+        {
+          "current_key": "AIzaSyBllmShHgWaBVGOz7UMQ2nNH0peu6RwtF4"
         }
       ],
       "services": {

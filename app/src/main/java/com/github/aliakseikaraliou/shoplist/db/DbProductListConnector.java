@@ -34,7 +34,7 @@ public class DbProductListConnector implements IDbConnector<IProductList> {
         Log.i("MYSQL:", "DbProductListConnector: put");
         final long productListRow = database.insert(DbConstants.ProductList.TABLE_NAME, null, contentValues);
         item.setId(productListRow);
-        for (final IProduct product : item) {
+        for (final IProduct product : item.getList()) {
             final long productRow = productConnector.put(product);
 
             final ContentValues connectionCV = new ContentValues();
@@ -99,7 +99,7 @@ public class DbProductListConnector implements IDbConnector<IProductList> {
     @Override
     public int remove(final IProductList item) {
         final Long id = item.getId();
-        for (final IProduct product : item) {
+        for (final IProduct product : item.getList()) {
             productConnector.remove(product);
             database.delete(DbConstants.Product_ProductList.TABLE_NAME, DbConstants.Product_ProductList.PRODUCT_LIST_ID + "=" + id, null);
         }

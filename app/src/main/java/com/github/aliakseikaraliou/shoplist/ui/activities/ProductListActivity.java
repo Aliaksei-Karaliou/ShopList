@@ -3,7 +3,6 @@ package com.github.aliakseikaraliou.shoplist.ui.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -12,11 +11,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,7 +25,6 @@ import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductAdapter;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class ProductListActivity extends AppCompatActivity {
@@ -64,7 +60,7 @@ public class ProductListActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.fragment_productlist_recycler);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        final ProductAdapter adapter = new ProductAdapter(this, productList);
+        final ProductAdapter adapter = new ProductAdapter(this, productList.getList());
         recyclerView.setAdapter(adapter);
         final DividerItemDecoration divider = new DividerItemDecoration(this, layoutManager.getOrientation());
         recyclerView.addItemDecoration(divider);

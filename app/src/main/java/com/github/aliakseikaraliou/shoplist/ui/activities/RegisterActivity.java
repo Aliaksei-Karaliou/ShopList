@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import static android.util.Patterns.*;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
@@ -37,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(final View v) {
                 if (!passwordEditText.getText().toString().equals(confirmEditText.getText().toString())) {
                     Toast.makeText(RegisterActivity.this, R.string.activity_login_passwordfail, Toast.LENGTH_SHORT).show();
-                } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailEditText.getText()).matches()) {
+                } else if (!EMAIL_ADDRESS.matcher(emailEditText.getText()).matches()) {
                     Toast.makeText(RegisterActivity.this, R.string.activity_login_emailfail, Toast.LENGTH_SHORT).show();
                 } else {
                     auth.createUserWithEmailAndPassword(emailEditText.getText().toString(), passwordEditText.getText().toString())
