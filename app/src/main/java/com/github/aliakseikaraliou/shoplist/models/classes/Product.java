@@ -21,6 +21,9 @@ public final class Product implements IProduct {
         this.quantity = quantity;
     }
 
+    public Product() {
+    }
+
     @Override
     public Long getId() {
         return id;

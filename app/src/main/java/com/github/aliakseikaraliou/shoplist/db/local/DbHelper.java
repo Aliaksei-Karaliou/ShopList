@@ -1,8 +1,10 @@
-package com.github.aliakseikaraliou.shoplist.db;
+package com.github.aliakseikaraliou.shoplist.db.local;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.github.aliakseikaraliou.shoplist.db.local.DbConstants;
 
 public class DbHelper extends SQLiteOpenHelper {
 

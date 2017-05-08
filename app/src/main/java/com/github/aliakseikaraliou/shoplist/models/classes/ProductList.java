@@ -2,30 +2,30 @@ package com.github.aliakseikaraliou.shoplist.models.classes;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class ProductList implements IProductList {
 
     private String title;
-    private final List<IProduct> productList;
-    private Long id = null;
+    private List<IProduct> productList;
+    private Long id;
+
+    public ProductList() {
+        this("");
+    }
 
     public ProductList(final String title) {
         this.title = title;
         this.productList = new ArrayList<>();
     }
 
+    @SuppressWarnings("unused")
     public ProductList(final String title, final List<IProduct> productList) {
         this.title = title;
         this.productList = new ArrayList<>(productList);
@@ -33,7 +33,14 @@ public class ProductList implements IProductList {
 
     @Override
     public List<IProduct> getList() {
-        return new ArrayList<>(productList);
+        return productList;
+    }
+
+    public void setList(@SuppressWarnings("TypeMayBeWeakened") final List<Product> productList) {
+        //noinspection AssignmentToCollectionOrArrayFieldFromParameter
+        final List<IProduct> arrayList = new ArrayList<>();
+        arrayList.addAll(productList);
+        this.productList = arrayList;
     }
 
     @Override
@@ -58,40 +65,15 @@ public class ProductList implements IProductList {
         }
     }
 
-    @Override
-    public String toJson() {
-        final Gson gson = new GsonBuilder().create();
-        final ProductList products = new ProductList(this.title, this.productList);
-        return gson.toJson(products);
-    }
+//    public String toJson() {
+//        final Gson gson = new GsonBuilder().create();
+//        final ProductList products = new ProductList(this.title, this.productList);
+//        return gson.toJson(products);
+//    }
 
     @Override
     public int size() {
         return productList.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return productList.isEmpty();
-    }
-
-    public boolean contains(final Object o) {
-        return productList.contains(o);
-    }
-
-    @NonNull
-    public Iterator<IProduct> iterator() {
-        return productList.iterator();
-    }
-
-    @NonNull
-    public Object[] toArray() {
-        return productList.toArray();
-    }
-
-    @NonNull
-    public <T> T[] toArray(@NonNull final T[] a) {
-        return a;
     }
 
     @Override
@@ -100,32 +82,8 @@ public class ProductList implements IProductList {
     }
 
     @Override
-    public boolean remove(final Object o) {
-        return productList.remove(o);
-    }
-
-    public boolean containsAll(@NonNull final Collection<?> c) {
-        return productList.containsAll(c);
-    }
-
-    public boolean addAll(@NonNull final Collection<? extends IProduct> c) {
-        return productList.addAll(c);
-    }
-
-    public boolean addAll(final int index, @NonNull final Collection<? extends IProduct> c) {
-        return productList.addAll(index, c);
-    }
-
-    public boolean removeAll(@NonNull final Collection<?> c) {
-        return productList.removeAll(c);
-    }
-
-    public boolean retainAll(@NonNull final Collection<?> c) {
-        return productList.retainAll(c);
-    }
-
-    public void clear() {
-        productList.clear();
+    public boolean remove(final IProduct product) {
+        return productList.remove(product);
     }
 
     public boolean equals(final Object o) {
@@ -142,10 +100,6 @@ public class ProductList implements IProductList {
         return productList.get(index);
     }
 
-    public IProduct set(final int index, final IProduct element) {
-        return productList.set(index, element);
-    }
-
     @Override
     public void add(final int index, final IProduct element) {
         productList.add(index, element);
@@ -154,28 +108,6 @@ public class ProductList implements IProductList {
     @Override
     public IProduct remove(final int index) {
         return productList.remove(index);
-    }
-
-    public int indexOf(final Object o) {
-        return productList.indexOf(o);
-    }
-
-    public int lastIndexOf(final Object o) {
-        return productList.lastIndexOf(o);
-    }
-
-    public ListIterator<IProduct> listIterator() {
-        return productList.listIterator();
-    }
-
-    @NonNull
-    public ListIterator<IProduct> listIterator(final int index) {
-        return productList.listIterator(index);
-    }
-
-    @NonNull
-    public List<IProduct> subList(final int fromIndex, final int toIndex) {
-        return productList.subList(fromIndex, toIndex);
     }
 
     @Override

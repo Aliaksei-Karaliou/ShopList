@@ -17,7 +17,6 @@ public interface IProductList extends Parcelable {
 
     void setId(final long id);
 
-    String toJson();
 
     void add(int position, IProduct product);
 
@@ -29,7 +28,5 @@ public interface IProductList extends Parcelable {
 
     IProduct get(int position);
 
-    boolean remove(Object o);
-
-    boolean isEmpty();
+    boolean remove(IProduct o);
 }

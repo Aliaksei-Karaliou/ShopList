@@ -1,9 +1,6 @@
 package com.github.aliakseikaraliou.shoplist;
 
-import android.content.Intent;
-
-import com.github.aliakseikaraliou.shoplist.db.DbHelper;
-import com.github.aliakseikaraliou.shoplist.services.FirebaseMessagingService;
+import com.github.aliakseikaraliou.shoplist.db.local.DbHelper;
 
 public class Application extends android.app.Application {
 

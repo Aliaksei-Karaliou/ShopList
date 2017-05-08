@@ -18,9 +18,11 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final Context context;
     private final List<IProduct> productList;
 
+    @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
     public ProductAdapter(final Context context, final List<IProduct> productList) {
         this.context = context;
         this.productList = productList;
+        new StringBuilder();
     }
 
     @Override
@@ -45,7 +47,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         private final TextView name;
 
-        public ViewHolder(final View itemView) {
+        ViewHolder(final View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.item_product_name);
             itemView.setOnCreateContextMenuListener(this);

@@ -21,14 +21,19 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.github.aliakseikaraliou.shoplist.R;
-import com.github.aliakseikaraliou.shoplist.db.DbProductListConnector;
-import com.github.aliakseikaraliou.shoplist.db.IDbConnector;
+import com.github.aliakseikaraliou.shoplist.db.firebase.FirebaseDbHelper;
+import com.github.aliakseikaraliou.shoplist.db.firebase.OnDataChanged;
+import com.github.aliakseikaraliou.shoplist.db.local.DbProductListConnector;
+import com.github.aliakseikaraliou.shoplist.db.local.IDbConnector;
+import com.github.aliakseikaraliou.shoplist.models.classes.User;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
+import com.github.aliakseikaraliou.shoplist.models.interfaces.IUser;
 import com.github.aliakseikaraliou.shoplist.services.FirebaseMessagingService;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private List<IProductList> list;
     private RecyclerView recyclerView;
     private IDbConnector<IProductList> productListConnector;
+    private FirebaseDbHelper firebaseDbHelper;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -112,6 +118,20 @@ public class MainActivity extends AppCompatActivity
             }
         });
         recyclerView.setAdapter(adapter);
+
+        firebaseDbHelper = new FirebaseDbHelper();
+        firebaseDbHelper.setOnChangeListener(new OnDataChanged<List<IProductList>>() {
+
+            @Override
+            public void onChange(final List<IProductList> data) {
+                new StringBuilder();
+            }
+
+            @Override
+            public void onError(final DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
@@ -176,12 +196,11 @@ public class MainActivity extends AppCompatActivity
         if (data != null) {
             final IProductList productList = data.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
             if (requestCode == UiConstants.Ids.PRODUCTLIST_CREATE) {
-                list.add(productList);
+                firebaseDbHelper.push(productList);
                 recyclerView.getAdapter().notifyDataSetChanged();
-                productListConnector.put(productList);
             } else if (requestCode == UiConstants.Ids.PRODUCTLIST_CHANGE) {
                 final int position = data.getIntExtra(UiConstants.Strings.POSITION, -1);
-                if (!productList.isEmpty()) {
+                if (productList.size() > 0) {
                     list.set(position, productList);
                 } else {
                     list.remove(position);
@@ -215,9 +234,9 @@ public class MainActivity extends AppCompatActivity
                             final String email = String.valueOf(emailEditText.getText());
                             if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                                 final IProductList list = MainActivity.this.list.get(position);
-                                final String json = list.toJson();
+                                final IUser user = new User(email);
+
                             }
-                            new StringBuilder();
                         }
                     })
                     .create();

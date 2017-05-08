@@ -1,4 +1,4 @@
-package com.github.aliakseikaraliou.shoplist.db;
+package com.github.aliakseikaraliou.shoplist.db.local;
 
 public interface DbConstants {
 

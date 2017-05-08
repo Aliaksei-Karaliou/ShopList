@@ -112,7 +112,8 @@ public class ProductListActivity extends AppCompatActivity {
                                                 final IProduct product = new Product.Builder(editText.getText().toString())
                                                         .build();
                                                 productList.add(product);
-                                                recyclerView.getAdapter().notifyItemInserted(productList.size() - 1);
+                                                recyclerView.getAdapter().notifyDataSetChanged();
+                                                new StringBuilder();
                                             }
                                         })
                                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
