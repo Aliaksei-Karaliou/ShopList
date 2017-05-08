@@ -23,8 +23,6 @@ import android.widget.EditText;
 import com.github.aliakseikaraliou.shoplist.R;
 import com.github.aliakseikaraliou.shoplist.db.firebase.FirebaseDbHelper;
 import com.github.aliakseikaraliou.shoplist.db.firebase.OnDataChanged;
-import com.github.aliakseikaraliou.shoplist.db.local.DbProductListConnector;
-import com.github.aliakseikaraliou.shoplist.db.local.IDbConnector;
 import com.github.aliakseikaraliou.shoplist.models.classes.User;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IUser;
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity
 
     private List<IProductList> list;
     private RecyclerView recyclerView;
-    private IDbConnector<IProductList> productListConnector;
     private FirebaseDbHelper firebaseDbHelper;
 
     @Override
@@ -53,6 +50,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        list = new ArrayList<>();
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String token = FirebaseInstanceId.getInstance().getToken();
@@ -100,10 +99,6 @@ public class MainActivity extends AppCompatActivity
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        list = new ArrayList<>();
-        productListConnector = new DbProductListConnector(this);
-        list.addAll(productListConnector.getAll());
-
         recyclerView = ((RecyclerView) findViewById(R.id.activity_main_recycler));
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         final ProductListAdapter adapter = new ProductListAdapter(this, list);
@@ -124,7 +119,9 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onChange(final List<IProductList> data) {
-                new StringBuilder();
+                list.clear();
+                list.addAll(data);
+                recyclerView.getAdapter().notifyDataSetChanged();
             }
 
             @Override
@@ -201,7 +198,7 @@ public class MainActivity extends AppCompatActivity
             } else if (requestCode == UiConstants.Ids.PRODUCTLIST_CHANGE) {
                 final int position = data.getIntExtra(UiConstants.Strings.POSITION, -1);
                 if (productList.size() > 0) {
-                    list.set(position, productList);
+                    firebaseDbHelper.update(productList);
                 } else {
                     list.remove(position);
                 }
@@ -220,7 +217,7 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(intent, UiConstants.Ids.PRODUCTLIST_CHANGE);
         } else if (item.getTitle().equals(getString(R.string.context_menu_productlist_delete))) {
             final IProductList product = list.remove(position);
-            productListConnector.remove(product);
+            firebaseDbHelper.delete(product);
             recyclerView.getAdapter().notifyItemRemoved(position);
         } else if (item.getTitle().equals(getString(R.string.context_menu_productlist_save))) {
             final EditText emailEditText = new EditText(this);
@@ -235,7 +232,7 @@ public class MainActivity extends AppCompatActivity
                             if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                                 final IProductList list = MainActivity.this.list.get(position);
                                 final IUser user = new User(email);
-
+                                firebaseDbHelper.send(user, list);
                             }
                         }
                     })

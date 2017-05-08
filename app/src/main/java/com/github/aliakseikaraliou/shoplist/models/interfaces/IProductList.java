@@ -2,6 +2,8 @@ package com.github.aliakseikaraliou.shoplist.models.interfaces;
 
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -11,12 +13,13 @@ public interface IProductList extends Parcelable {
 
     void setTitle(final String title);
 
-    Long getId();
-
     List<IProduct> getList();
 
-    void setId(final long id);
+    @Exclude
+    String getId();
 
+    @Exclude
+    void setId(final String id);
 
     void add(int position, IProduct product);
 

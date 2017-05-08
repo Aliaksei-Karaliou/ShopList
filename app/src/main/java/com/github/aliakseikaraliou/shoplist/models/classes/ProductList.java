@@ -2,9 +2,11 @@ package com.github.aliakseikaraliou.shoplist.models.classes;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
+import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +16,8 @@ public class ProductList implements IProductList {
 
     private String title;
     private List<IProduct> productList;
-    private Long id;
+    @Exclude
+    private transient String id;
 
     public ProductList() {
         this("");
@@ -54,12 +57,14 @@ public class ProductList implements IProductList {
     }
 
     @Override
-    public Long getId() {
+    @Exclude
+    public String getId() {
         return id;
     }
 
     @Override
-    public void setId(final long id) {
+    @Exclude
+    public void setId(@NonNull final String id) {
         if (this.id == null) {
             this.id = id;
         }
@@ -110,6 +115,7 @@ public class ProductList implements IProductList {
         return productList.remove(index);
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -119,15 +125,16 @@ public class ProductList implements IProductList {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(this.title);
         dest.writeTypedList(this.productList);
+        dest.writeString(this.id);
     }
 
     private ProductList(final Parcel in) {
         this.title = in.readString();
         this.productList = in.createTypedArrayList(Product.CREATOR);
+        this.id = in.readString();
     }
 
-    public static final Parcelable.Creator<ProductList> CREATOR = new Parcelable.Creator<ProductList>() {
-
+    public static final Creator<ProductList> CREATOR = new Creator<ProductList>() {
         @Override
         public ProductList createFromParcel(final Parcel source) {
             return new ProductList(source);

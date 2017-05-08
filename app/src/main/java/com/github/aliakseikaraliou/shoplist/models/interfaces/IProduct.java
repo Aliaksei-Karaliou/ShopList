@@ -2,11 +2,9 @@ package com.github.aliakseikaraliou.shoplist.models.interfaces;
 
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 public interface IProduct extends Parcelable {
-
-    Long getId();
-
-    void setId(long id);
 
     String getName();
 
