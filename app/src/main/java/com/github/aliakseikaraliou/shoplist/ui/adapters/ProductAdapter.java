@@ -17,17 +17,26 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private final Context context;
     private final List<IProduct> productList;
+    private OnProductClickListener productClickListener;
+
 
     @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
     public ProductAdapter(final Context context, final List<IProduct> productList) {
         this.context = context;
         this.productList = productList;
-        new StringBuilder();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         final View view = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                if (productClickListener != null && view.getTag() != null) {
+                    productClickListener.onClick((IProduct) view.getTag());
+                }
+            }
+        });
         return new ViewHolder(view);
     }
 
@@ -36,11 +45,16 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         final ViewHolder viewHolder = (ViewHolder) holder;
         final IProduct product = productList.get(position);
         viewHolder.name.setText(product.getName());
+        viewHolder.itemView.setTag(product);
     }
 
     @Override
     public int getItemCount() {
         return productList.size();
+    }
+
+    public void setProductClickListener(final OnProductClickListener productClickListener) {
+        this.productClickListener = productClickListener;
     }
 
     private class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -55,8 +69,12 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @Override
         public void onCreateContextMenu(final ContextMenu menu, final View view, final ContextMenu.ContextMenuInfo menuInfo) {
-            menu.add(ContextMenu.NONE, view.getId(), getAdapterPosition(), "Edit");
+            menu.add(ContextMenu.NONE, view.getId(), getAdapterPosition(), R.string.edit);
             menu.add(ContextMenu.NONE, view.getId(), getAdapterPosition(), R.string.activity_productlist_context_search);
         }
+    }
+
+    public interface OnProductClickListener {
+        void onClick(IProduct product);
     }
 }

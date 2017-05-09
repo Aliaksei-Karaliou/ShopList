@@ -33,4 +33,10 @@
     <string name="drawer_authorize">Authorize</string>
     <string name="context_menu_productlist_save">Send</string>
     <string name="activity_main_send_title">Enter a receiver\'s email</string>
+    <string name="edit">Edit</string>
+    <string name="item_product_dialog_name">Name</string>
+    <string name="item_product_dialog_description">Description</string>
+    <string name="item_product_dialog_price">Price</string>
+    <string name="item_product_dialog_quantity">Quantity</string>
+    <string name="error_default">Some error happens</string>
 </resources>

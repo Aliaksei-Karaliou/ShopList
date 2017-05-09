@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 
 import java.util.List;
-import java.util.Objects;
 
 public interface IProductList extends Parcelable {
 
@@ -31,5 +30,5 @@ public interface IProductList extends Parcelable {
 
     IProduct get(int position);
 
-    boolean remove(IProduct o);
+    IProduct set(final int index, final IProduct element);
 }

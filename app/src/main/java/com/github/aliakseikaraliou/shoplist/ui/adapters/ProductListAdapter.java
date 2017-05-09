@@ -18,9 +18,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private final Context context;
     private final List<IProductList> productLists;
+    @SuppressWarnings("FieldCanBeLocal")
     private final String COUNT_TEMPLATE = "%d\nitems";
     private OnProductListClickListener onProductListClickListener;
 
+    @SuppressWarnings("AssignmentToCollectionOrArrayFieldFromParameter")
     public ProductListAdapter(final Context context, final List<IProductList> productLists) {
         this.context = context;
         this.productLists = productLists;

@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.github.aliakseikaraliou.shoplist.R;
 import com.github.aliakseikaraliou.shoplist.db.firebase.FirebaseDbHelper;
@@ -26,13 +27,9 @@ import com.github.aliakseikaraliou.shoplist.db.firebase.OnDataChanged;
 import com.github.aliakseikaraliou.shoplist.models.classes.User;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IUser;
-import com.github.aliakseikaraliou.shoplist.services.FirebaseMessagingService;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,12 +49,6 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         list = new ArrayList<>();
-
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final String token = FirebaseInstanceId.getInstance().getToken();
-
-        final Intent firebaseMessagingServiceIntent = new Intent(this, FirebaseMessagingService.class);
-        startService(firebaseMessagingServiceIntent);
 
         final FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -114,6 +105,8 @@ public class MainActivity extends AppCompatActivity
         });
         recyclerView.setAdapter(adapter);
 
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.activity_main_progress);
+
         firebaseDbHelper = new FirebaseDbHelper();
         firebaseDbHelper.setOnChangeListener(new OnDataChanged<List<IProductList>>() {
 
@@ -122,6 +115,7 @@ public class MainActivity extends AppCompatActivity
                 list.clear();
                 list.addAll(data);
                 recyclerView.getAdapter().notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override

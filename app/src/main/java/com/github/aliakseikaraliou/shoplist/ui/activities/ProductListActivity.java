@@ -1,5 +1,6 @@
 package com.github.aliakseikaraliou.shoplist.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +15,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.aliakseikaraliou.shoplist.R;
@@ -25,6 +27,9 @@ import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductAdapter;
 
+import org.jsoup.helper.StringUtil;
+
+import java.text.NumberFormat;
 import java.util.Stack;
 
 public class ProductListActivity extends AppCompatActivity {
@@ -33,11 +38,14 @@ public class ProductListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Stack<Pair<Integer, IProduct>> deletedProducts;
     private int position = -1;
+    private boolean changed;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productlist);
+
+        changed = false;
 
         final Intent intent = getIntent();
 
@@ -61,6 +69,30 @@ public class ProductListActivity extends AppCompatActivity {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         final ProductAdapter adapter = new ProductAdapter(this, productList.getList());
+        adapter.setProductClickListener(new ProductAdapter.OnProductClickListener() {
+            @Override
+            public void onClick(final IProduct product) {
+                final View view = getLayoutInflater().inflate(R.layout.item_product_dialog_view, null);
+                final TextView nameEditText = (TextView) view.findViewById(R.id.item_product_dialog_name);
+                nameEditText.setText(product.getName());
+                final TextView descriptionEditText = (TextView) view.findViewById(R.id.item_product_dialog_description);
+                descriptionEditText.setText(product.getDescription());
+                final TextView priceEditText = (TextView) view.findViewById(R.id.item_product_dialog_price);
+                priceEditText.setText(String.valueOf(product.getPrice()));
+                final TextView quantityEditText = (TextView) view.findViewById(R.id.item_product_dialog_quantity);
+                quantityEditText.setText(String.valueOf(product.getQuantity()));
+                final AlertDialog alertDialog = new AlertDialog.Builder(ProductListActivity.this)
+                        .setView(view)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialog, final int which) {
+
+                            }
+                        })
+                        .create();
+                alertDialog.show();
+            }
+        });
         recyclerView.setAdapter(adapter);
         final DividerItemDecoration divider = new DividerItemDecoration(this, layoutManager.getOrientation());
         recyclerView.addItemDecoration(divider);
@@ -77,9 +109,11 @@ public class ProductListActivity extends AppCompatActivity {
                 final IProduct deletedProduct = productList.remove(position);
                 recyclerView.getAdapter().notifyItemRemoved(position);
                 deletedProducts.push(new Pair<>(position, deletedProduct));
+                changed = true;
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
     }
 
     @Override
@@ -101,19 +135,38 @@ public class ProductListActivity extends AppCompatActivity {
                         @Override
                         public void onClick(final DialogInterface dialogInterface, final int which) {
                             if (items[which].equals(getString(R.string.productlist_dialog_typeproduct))) {
-                                final EditText editText = new EditText(ProductListActivity.this);
+                                @SuppressLint("InflateParams")
+                                final View view = getLayoutInflater().inflate(R.layout.item_product_dialog_edit, null);
                                 final AlertDialog dialog = new AlertDialog.Builder(ProductListActivity.this)
                                         .setTitle(R.string.productlist_dialog_typeproduct)
-                                        .setView(editText)
+                                        .setView(view)
                                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
                                             @Override
                                             public void onClick(final DialogInterface dialog, final int which) {
-                                                final IProduct product = new Product.Builder(editText.getText().toString())
+                                                final String name = ((TextView) view.findViewById(R.id.item_product_dialog_name)).getText().toString();
+                                                final String description = ((TextView) view.findViewById(R.id.item_product_dialog_description)).getText().toString();
+                                                double price;
+                                                try {
+                                                    price = Double.parseDouble(((TextView) view.findViewById(R.id.item_product_dialog_price)).getText().toString());
+                                                } catch (final NumberFormatException e) {
+                                                    price = 0;
+                                                }
+                                                double quantity;
+                                                try {
+                                                    quantity = Double.parseDouble(((TextView) view.findViewById(R.id.item_product_dialog_quantity)).getText().toString());
+                                                } catch (final NumberFormatException e) {
+                                                    quantity = 1;
+                                                }
+                                                final IProduct product = new Product.Builder(name)
+                                                        .setPrice(price)
+                                                        .setDescription(description)
+                                                        .setQuantity(quantity)
+                                                        .setPrice(price)
                                                         .build();
                                                 productList.add(product);
+                                                changed = true;
                                                 recyclerView.getAdapter().notifyDataSetChanged();
-                                                new StringBuilder();
                                             }
                                         })
                                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -178,11 +231,60 @@ public class ProductListActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
-        final IProduct product = productList.get(item.getOrder());
+        final int position = item.getOrder();
+        final IProduct product = productList.get(position);
         if (item.getTitle().equals(getString(R.string.activity_productlist_context_search))) {
             final Intent intent = new Intent(this, ShopListActivity.class);
             intent.putExtra(UiConstants.Strings.PRODUCT_TITLE, product.getName());
             startActivity(intent);
+        } else if (item.getTitle().equals(getString(R.string.edit))) {
+            changed = true;
+            @SuppressLint("InflateParams")
+            final View dialogView = getLayoutInflater().inflate(R.layout.item_product_dialog_edit, null);
+            final TextView nameEditText = (TextView) dialogView.findViewById(R.id.item_product_dialog_name);
+            nameEditText.setText(product.getName());
+            final TextView descriptionEditText = (TextView) dialogView.findViewById(R.id.item_product_dialog_description);
+            descriptionEditText.setText(product.getDescription());
+            final TextView priceEditText = (TextView) dialogView.findViewById(R.id.item_product_dialog_price);
+            priceEditText.setText(String.valueOf(product.getPrice()));
+            final TextView quantityEditText = (TextView) dialogView.findViewById(R.id.item_product_dialog_quantity);
+            quantityEditText.setText(String.valueOf(product.getQuantity()));
+            final AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.edit)
+                    .setView(dialogView)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            try {
+                                final NumberFormat numberFormat = NumberFormat.getInstance();
+                                final String name = nameEditText.getText().toString();
+                                final String description = descriptionEditText.getText().toString();
+                                final double quantity;
+                                final double price;
+                                if (!StringUtil.isBlank(quantityEditText.getText().toString())) {
+                                    quantity = numberFormat.parse(quantityEditText.getText().toString()).doubleValue();
+                                } else {
+                                    quantity = 1;
+                                }
+                                if (!StringUtil.isBlank(priceEditText.getText().toString())) {
+                                    price = numberFormat.parse(priceEditText.getText().toString()).doubleValue();
+                                } else {
+                                    price = 0;
+                                }
+                                final IProduct product = new Product.Builder(name)
+                                        .setDescription(description)
+                                        .setPrice(price)
+                                        .setQuantity(quantity)
+                                        .build();
+                                productList.set(position, product);
+                                recyclerView.getAdapter().notifyDataSetChanged();
+                            } catch (final Throwable e) {
+                                Toast.makeText(ProductListActivity.this, R.string.error_default, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .create();
+            alertDialog.show();
         }
         return super.onContextItemSelected(item);
     }
@@ -216,6 +318,10 @@ public class ProductListActivity extends AppCompatActivity {
                     }
                 })
                 .create();
-        alertDialog.show();
+        if (changed) {
+            alertDialog.show();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

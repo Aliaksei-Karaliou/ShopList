@@ -1,7 +1,6 @@
 package com.github.aliakseikaraliou.shoplist.models.classes;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
@@ -9,7 +8,6 @@ import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class ProductList implements IProductList {
@@ -19,6 +17,7 @@ public class ProductList implements IProductList {
     @Exclude
     private transient String id;
 
+    @SuppressWarnings("unused")
     public ProductList() {
         this("");
     }
@@ -40,7 +39,6 @@ public class ProductList implements IProductList {
     }
 
     public void setList(@SuppressWarnings("TypeMayBeWeakened") final List<Product> productList) {
-        //noinspection AssignmentToCollectionOrArrayFieldFromParameter
         final List<IProduct> arrayList = new ArrayList<>();
         arrayList.addAll(productList);
         this.productList = arrayList;
@@ -87,8 +85,8 @@ public class ProductList implements IProductList {
     }
 
     @Override
-    public boolean remove(final IProduct product) {
-        return productList.remove(product);
+    public IProduct set(final int index, final IProduct element) {
+        return getList().set(index, element);
     }
 
     public boolean equals(final Object o) {
@@ -128,9 +126,11 @@ public class ProductList implements IProductList {
         dest.writeString(this.id);
     }
 
+    @SuppressWarnings("unchecked")
     private ProductList(final Parcel in) {
         this.title = in.readString();
-        this.productList = in.createTypedArrayList(Product.CREATOR);
+        this.productList = new ArrayList<>();
+        this.productList.addAll(in.createTypedArrayList(Product.CREATOR));
         this.id = in.readString();
     }
 

@@ -28,19 +28,9 @@
         <activity android:name=".ui.activities.RegisterActivity"/>
         <activity android:name=".ui.activities.LoginActivity"/>
 
-        <service android:name=".services.FirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode"/>
-
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent"/>
 
     </application>
 

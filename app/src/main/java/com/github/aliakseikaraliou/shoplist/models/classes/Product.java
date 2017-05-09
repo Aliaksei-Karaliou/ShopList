@@ -4,8 +4,6 @@ import android.os.Parcel;
 
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
 
-import java.util.Objects;
-
 public final class Product implements IProduct {
 
     private String name;
@@ -100,6 +98,7 @@ public final class Product implements IProduct {
         }
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -109,22 +108,25 @@ public final class Product implements IProduct {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeString(this.name);
         dest.writeString(this.description);
+        dest.writeDouble(this.price);
+        dest.writeDouble(this.quantity);
     }
 
     private Product(final Parcel in) {
         this.name = in.readString();
         this.description = in.readString();
+        this.price = in.readDouble();
+        this.quantity = in.readDouble();
     }
 
-    public static final Creator<IProduct> CREATOR = new Creator<IProduct>() {
-
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
         @Override
-        public IProduct createFromParcel(final Parcel source) {
+        public Product createFromParcel(final Parcel source) {
             return new Product(source);
         }
 
         @Override
-        public IProduct[] newArray(final int size) {
+        public Product[] newArray(final int size) {
             return new Product[size];
         }
     };
