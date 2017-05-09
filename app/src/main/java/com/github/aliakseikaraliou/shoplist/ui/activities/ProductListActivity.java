@@ -336,6 +336,7 @@ public class ProductListActivity extends AppCompatActivity {
                 productList.add(shopListProduct.getProduct());
             }
             recyclerView.getAdapter().notifyDataSetChanged();
+            changed = true;
         }
     }
 }

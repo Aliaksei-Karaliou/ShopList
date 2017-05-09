@@ -15,13 +15,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.github.aliakseikaraliou.shoplist.R;
 import com.github.aliakseikaraliou.shoplist.db.firebase.FirebaseDbHelper;
@@ -31,6 +31,8 @@ import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IUser;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
@@ -159,22 +161,11 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         // Handle navigation view item clicks here.
         final int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.drawer_register) {
-            final Intent intent = new Intent(this, RegisterActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_send) {
-
-        } else if (id == R.id.drawer_authorize) {
-            final Intent intent = new Intent(this, LoginActivity.class);
+        if (id == R.id.log_out) {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(this, "Succeed", Toast.LENGTH_SHORT).show();
+            final Intent intent = new Intent(this, SplashActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
 
@@ -190,16 +181,15 @@ public class MainActivity extends AppCompatActivity
             final IProductList productList = data.getParcelableExtra(UiConstants.Strings.PRODUCT_LIST);
             if (requestCode == UiConstants.Ids.PRODUCTLIST_CREATE) {
                 firebaseDbHelper.push(productList);
-                recyclerView.getAdapter().notifyDataSetChanged();
             } else if (requestCode == UiConstants.Ids.PRODUCTLIST_CHANGE) {
                 final int position = data.getIntExtra(UiConstants.Strings.POSITION, -1);
                 if (productList.size() > 0) {
                     firebaseDbHelper.update(productList);
                 } else {
-                    list.remove(position);
+                    firebaseDbHelper.delete(productList);
                 }
-                recyclerView.getAdapter().notifyDataSetChanged();
             }
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 

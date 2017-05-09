@@ -43,4 +43,5 @@
     <string name="save">Save</string>
     <string name="activity_splash_login">Login</string>
     <string name="activity_splash_register">Register</string>
+    <string name="log_out">Log out</string>
 </resources>
