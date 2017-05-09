@@ -1,9 +1,11 @@
 package com.github.aliakseikaraliou.shoplist.models.interfaces;
 
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface IProductList extends Parcelable {
@@ -31,4 +33,6 @@ public interface IProductList extends Parcelable {
     IProduct get(int position);
 
     IProduct set(final int index, final IProduct element);
+
+    boolean addAll(@NonNull Collection<? extends IProduct> c);
 }

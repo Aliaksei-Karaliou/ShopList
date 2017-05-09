@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -215,6 +217,7 @@ public class MainActivity extends AppCompatActivity
             recyclerView.getAdapter().notifyItemRemoved(position);
         } else if (item.getTitle().equals(getString(R.string.context_menu_productlist_save))) {
             final EditText emailEditText = new EditText(this);
+            emailEditText.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
             final AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.activity_main_send_title)
                     .setView(emailEditText)

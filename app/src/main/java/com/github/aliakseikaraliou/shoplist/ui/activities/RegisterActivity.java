@@ -1,5 +1,6 @@
 package com.github.aliakseikaraliou.shoplist.ui.activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +50,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull final Task<AuthResult> task) {
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(RegisterActivity.this, R.string.activity_login_firebasefail, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        final Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
                                     }
                                 }
                             });

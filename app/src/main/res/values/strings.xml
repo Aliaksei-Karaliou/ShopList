@@ -39,4 +39,8 @@
     <string name="item_product_dialog_price">Price</string>
     <string name="item_product_dialog_quantity">Quantity</string>
     <string name="error_default">Some error happens</string>
+    <string name="activity_productlist_dialog_savechanges">Do you want to save your changes?</string>
+    <string name="save">Save</string>
+    <string name="activity_splash_login">Login</string>
+    <string name="activity_splash_register">Register</string>
 </resources>

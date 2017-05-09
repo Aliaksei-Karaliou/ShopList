@@ -24,12 +24,14 @@ import com.github.aliakseikaraliou.shoplist.models.classes.Product;
 import com.github.aliakseikaraliou.shoplist.models.classes.ProductList;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProduct;
 import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
+import com.github.aliakseikaraliou.shoplist.models.interfaces.IShopListProduct;
 import com.github.aliakseikaraliou.shoplist.ui.UiConstants;
 import com.github.aliakseikaraliou.shoplist.ui.adapters.ProductAdapter;
 
 import org.jsoup.helper.StringUtil;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Stack;
 
 public class ProductListActivity extends AppCompatActivity {
@@ -183,7 +185,7 @@ public class ProductListActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (items[which].equals(getString(R.string.product_list_dialog_shop))) {
                                 final Intent intent = new Intent(ProductListActivity.this, ShopListActivity.class);
-                                startActivity(intent);
+                                startActivityForResult(intent, UiConstants.Ids.SHOP_LIST);
                             }
                         }
                     }).create();
@@ -293,7 +295,7 @@ public class ProductListActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         final AlertDialog alertDialog = new AlertDialog.Builder(this)
-                .setTitle("Do you want to save your changes?")
+                .setTitle(R.string.activity_productlist_dialog_savechanges)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
                     @Override
@@ -322,6 +324,18 @@ public class ProductListActivity extends AppCompatActivity {
             alertDialog.show();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (intent != null) {
+            final List<IShopListProduct> shopList = intent.getParcelableArrayListExtra(UiConstants.Strings.SHOP_LIST);
+            for (final IShopListProduct shopListProduct : shopList) {
+                productList.add(shopListProduct.getProduct());
+            }
+            recyclerView.getAdapter().notifyDataSetChanged();
         }
     }
 }

@@ -8,6 +8,7 @@ import com.github.aliakseikaraliou.shoplist.models.interfaces.IProductList;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ProductList implements IProductList {
@@ -113,6 +114,10 @@ public class ProductList implements IProductList {
         return productList.remove(index);
     }
 
+    @Override
+    public boolean addAll(@NonNull final Collection<? extends IProduct> c) {
+        return getList().addAll(c);
+    }
 
     @Override
     public int describeContents() {

@@ -1,5 +1,6 @@
 package com.github.aliakseikaraliou.shoplist.ui.activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,7 +42,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, R.string.activity_login_firebasefail, Toast.LENGTH_SHORT).show();
                         } else {
-                            onBackPressed();
+                            final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                         }
                     }
                 });

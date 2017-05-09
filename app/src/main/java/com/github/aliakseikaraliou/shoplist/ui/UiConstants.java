@@ -6,6 +6,7 @@ public interface UiConstants {
 
         int PRODUCTLIST_CREATE = 0;
         int PRODUCTLIST_CHANGE = 1;
+        int SHOP_LIST = 2;
     }
 
     interface Strings {
