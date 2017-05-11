@@ -16,7 +16,7 @@
     <string name="activity_productlist_context_search">Search in shops</string>
     <string name="item_shoplist_button">Add</string>
     <string name="product_list_dialog_shop">Add product from Shop</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
@@ -44,4 +44,5 @@
     <string name="activity_splash_login">Login</string>
     <string name="activity_splash_register">Register</string>
     <string name="log_out">Log out</string>
+    <string name="activity_productlist_context_delete">Delete</string>
 </resources>

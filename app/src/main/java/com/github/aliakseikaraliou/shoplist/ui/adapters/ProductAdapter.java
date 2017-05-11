@@ -70,7 +70,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         @Override
         public void onCreateContextMenu(final ContextMenu menu, final View view, final ContextMenu.ContextMenuInfo menuInfo) {
             menu.add(ContextMenu.NONE, view.getId(), getAdapterPosition(), R.string.edit);
-            menu.add(ContextMenu.NONE, view.getId(), getAdapterPosition(), R.string.activity_productlist_context_search);
+            menu.add(ContextMenu.NONE, view.getId(), getAdapterPosition(), R.string.activity_productlist_context_delete);
         }
     }
 

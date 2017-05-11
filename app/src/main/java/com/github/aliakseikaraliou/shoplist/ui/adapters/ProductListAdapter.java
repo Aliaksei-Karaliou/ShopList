@@ -55,6 +55,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ((ViewHolder) holder).countTextView.setText(String.format(Locale.getDefault(), COUNT_TEMPLATE, productList.size()));
     }
 
+
+
     @Override
     public int getItemCount() {
         return productLists.size();

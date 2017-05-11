@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import org.jsoup.helper.StringUtil;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Stack;
 
 public class ProductListActivity extends AppCompatActivity {
@@ -41,6 +43,7 @@ public class ProductListActivity extends AppCompatActivity {
     private Stack<Pair<Integer, IProduct>> deletedProducts;
     private int position = -1;
     private boolean changed;
+    private TextView totalPrice;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -67,7 +70,7 @@ public class ProductListActivity extends AppCompatActivity {
 
         deletedProducts = new Stack<>();
 
-        recyclerView = (RecyclerView) findViewById(R.id.fragment_productlist_recycler);
+        recyclerView = (RecyclerView) findViewById(R.id.activity_productlist_recycler);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         final ProductAdapter adapter = new ProductAdapter(this, productList.getList());
@@ -110,11 +113,14 @@ public class ProductListActivity extends AppCompatActivity {
                 final int position = viewHolder.getAdapterPosition();
                 final IProduct deletedProduct = productList.remove(position);
                 recyclerView.getAdapter().notifyItemRemoved(position);
+                setTotalPrice();
                 deletedProducts.push(new Pair<>(position, deletedProduct));
                 changed = true;
             }
         });
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        totalPrice = (TextView) findViewById(R.id.activity_productlist_total);
 
     }
 
@@ -128,8 +134,7 @@ public class ProductListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
-        final String[] items = new String[]{getString(R.string.productlist_dialog_typeproduct),
-                getString(R.string.productlist_dialog_barcode), getString(R.string.product_list_dialog_shop)};
+        final String[] items = new String[]{getString(R.string.productlist_dialog_typeproduct), getString(R.string.product_list_dialog_shop)};
         if (id == R.id.menu_activity_productlist_add) {
             final AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setItems(items, new DialogInterface.OnClickListener() {
@@ -169,6 +174,7 @@ public class ProductListActivity extends AppCompatActivity {
                                                 productList.add(product);
                                                 changed = true;
                                                 recyclerView.getAdapter().notifyDataSetChanged();
+                                                setTotalPrice();
                                             }
                                         })
                                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -184,8 +190,27 @@ public class ProductListActivity extends AppCompatActivity {
                                 final Intent intent = new Intent(ProductListActivity.this, BarcodeActivity.class);
                                 startActivity(intent);
                             } else if (items[which].equals(getString(R.string.product_list_dialog_shop))) {
-                                final Intent intent = new Intent(ProductListActivity.this, ShopListActivity.class);
-                                startActivityForResult(intent, UiConstants.Ids.SHOP_LIST);
+
+                                final EditText editText = new EditText(ProductListActivity.this);
+                                final AlertDialog dialog = new AlertDialog.Builder(ProductListActivity.this)
+                                        .setTitle(R.string.productlist_dialog_typeproduct)
+                                        .setView(editText)
+                                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(final DialogInterface dialog, final int which) {
+                                                final Intent intent = new Intent(ProductListActivity.this, ShopListActivity.class);
+                                                intent.putExtra(UiConstants.Strings.PRODUCT_TITLE, editText.getText().toString());
+                                                startActivityForResult(intent, UiConstants.Ids.SHOP_LIST);
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(final DialogInterface dialog, final int which) {
+
+                                            }
+                                        })
+                                        .create();
+                                dialog.show();
                             }
                         }
                     }).create();
@@ -197,6 +222,7 @@ public class ProductListActivity extends AppCompatActivity {
                 final IProduct product = productPair.second;
                 productList.add(position, product);
                 recyclerView.getAdapter().notifyItemInserted(position);
+                setTotalPrice();
             } else {
                 Toast.makeText(this, R.string.activity_productlist_noproductstorestore, Toast.LENGTH_SHORT).show();
             }
@@ -211,6 +237,7 @@ public class ProductListActivity extends AppCompatActivity {
                     product = productPair.second;
                     productList.add(position, product);
                     recyclerView.getAdapter().notifyItemInserted(position);
+                    setTotalPrice();
                 }
             } else {
                 Toast.makeText(this, R.string.activity_productlist_noproductstorestore, Toast.LENGTH_SHORT).show();
@@ -235,10 +262,12 @@ public class ProductListActivity extends AppCompatActivity {
     public boolean onContextItemSelected(final MenuItem item) {
         final int position = item.getOrder();
         final IProduct product = productList.get(position);
-        if (item.getTitle().equals(getString(R.string.activity_productlist_context_search))) {
-            final Intent intent = new Intent(this, ShopListActivity.class);
-            intent.putExtra(UiConstants.Strings.PRODUCT_TITLE, product.getName());
-            startActivity(intent);
+        if (item.getTitle().equals(getString(R.string.activity_productlist_context_delete))) {
+            final IProduct deletedProduct = productList.remove(position);
+            recyclerView.getAdapter().notifyItemRemoved(position);
+            setTotalPrice();
+            deletedProducts.push(new Pair<>(position, deletedProduct));
+            changed = true;
         } else if (item.getTitle().equals(getString(R.string.edit))) {
             changed = true;
             @SuppressLint("InflateParams")
@@ -280,6 +309,7 @@ public class ProductListActivity extends AppCompatActivity {
                                         .build();
                                 productList.set(position, product);
                                 recyclerView.getAdapter().notifyDataSetChanged();
+                                setTotalPrice();
                             } catch (final Throwable e) {
                                 Toast.makeText(ProductListActivity.this, R.string.error_default, Toast.LENGTH_SHORT).show();
                             }
@@ -336,7 +366,17 @@ public class ProductListActivity extends AppCompatActivity {
                 productList.add(shopListProduct.getProduct());
             }
             recyclerView.getAdapter().notifyDataSetChanged();
+            setTotalPrice();
             changed = true;
         }
+    }
+
+    private void setTotalPrice() {
+        final List<IProduct> list = productList.getList();
+        double sum = 0;
+        for (final IProduct product : list) {
+            sum += product.getPrice();
+        }
+        totalPrice.setText(String.format(Locale.getDefault(), "Total price: %f", sum));
     }
 }

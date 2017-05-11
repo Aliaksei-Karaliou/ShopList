@@ -41,8 +41,7 @@ public class ShopListActivity extends AppCompatActivity implements LoaderManager
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_list);
-//        final String title = getIntent().getStringExtra(UiConstants.Strings.PRODUCT_TITLE);
-        final String title = "Молоко";
+        final String title = getIntent().getStringExtra(UiConstants.Strings.PRODUCT_TITLE);
         progressBar = (ProgressBar) findViewById(R.id.activity_shoplist_progress);
 
         progressBar.setVisibility(View.VISIBLE);
@@ -50,6 +49,7 @@ public class ShopListActivity extends AppCompatActivity implements LoaderManager
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(title);
         }
 
         recyclerView = ((RecyclerView) findViewById(R.id.activity_shoplist_recycler));
