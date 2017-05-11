@@ -121,7 +121,7 @@ public class ProductListActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         totalPrice = (TextView) findViewById(R.id.activity_productlist_total);
-
+        setTotalPrice();
     }
 
     @Override
@@ -377,6 +377,6 @@ public class ProductListActivity extends AppCompatActivity {
         for (final IProduct product : list) {
             sum += product.getPrice();
         }
-        totalPrice.setText(String.format(Locale.getDefault(), "Total price: %f", sum));
+        totalPrice.setText(String.format(Locale.getDefault(), "Total price: %.2f", sum));
     }
 }
